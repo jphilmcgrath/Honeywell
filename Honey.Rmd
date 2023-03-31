@@ -1,0 +1,72 @@
+---
+title: "HoneywellCastStudy"
+author: "Jordan McGrath"
+date: "2023-03-31"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(car)
+library(mosaic)
+library(pander)
+library(tidyverse)
+censusClass <- filter(HoneywellData_1, `Census Class`== "Hourly")
+productionwork <- filter(HoneywellData_1, `Global Sub Function` == "Production Workers")
+ind1prodwork <- filter(productionwork, Location == "IND1")
+ind2prodwork <- filter(productionwork, Location == "IND2")
+in1prodwork <- filter(productionwork, Location == "IN1")
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+pander(favstats(((`Annual Rate USD`/12)/4)/`Standard Hours` ~ `Global Sub Function`, data = censusClass) [, c("Global Sub Function","mean","sd","n")])
+```
+```{r}
+pander(favstats(`Years of Service` ~ Location, data = productionwork) [, c("Location","mean","sd","n")])
+```
+```{r}
+pander(favstats(`Years of Service` ~ `Global Job Title`, data = productionwork) [, c("Global Job Title","mean","sd","n")])
+```
+```{r}
+GJT.aov <- aov(`Years of Service` ~ `Global Job Title`, data = productionwork)
+pander(summary(GJT.aov))
+```
+```{r}
+plotly(`Years of Service` ~ `Global Job Title`, data = productionwork, main = "Global Job Title by Years of Service", ylab = "Years of Service Mean", xlab = "Global Job Title")
+```
+
+
+
+
+
+```{r}
+pander(favstats(`Years of Service` ~ `Global Job Title`, data = ind1prodwork) [, c("Global Job Title","mean","sd","n")])
+```
+```{r}
+pander(favstats(`Years of Service` ~ `Global Job Title`, data = ind2prodwork) [, c("Global Job Title","mean","sd","n")])
+```
+```{r}
+pander(favstats(`Years of Service` ~ `Global Job Title`, data = in1prodwork) [, c("Global Job Title","mean","sd","n")])
+```
+
+
+
+
+
+
+
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
